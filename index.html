@@ -44,9 +44,252 @@
     </section>
 
     <section class="slide">
-        <h2>Work in progress...</h2>
-       
-    </section>    
+        <h2>Presentation plan</h2>
+        <ol>
+            <li>Examples!</li>
+            <li>Short introduction to OpenGL and WebGL</li>
+            <li>What is THREE.js</li>
+            <li>Hello world!</li>
+            <li>More advanced sample</li>
+        </ol>
+    </section>
+
+
+    <section class="slide">
+        <h2>Examples!</h2>
+        <ol>            
+            <li>
+                <a href="http://armsglobe.chromeexperiments.com/" target="_blank">
+                    Arms Globe
+                </a>
+            </li>
+            <li>
+                <a href="http://osr.org/oms/" target="_blank">
+                    One million stars
+                </a>
+            </li>
+            <li>
+                <a href="http://madebyevan.com/webgl-water/" target="_blank">
+                    WebGL Water
+                </a>
+            </li>
+            <li>
+                <a href="http://alteredqualia.com/three/examples/webgl_terrain_dynamic.html" target="_blank">
+                    Dynamic terrain
+                </a>
+            </li>
+            <li>
+                <a href="https://03f35214dba772a39a03fb74f7e5418884d95d64.googledrive.com/host/0B1o_MFQJ8TN7cFRpellKMFRfbzQ/" target="_blank">
+                    One million particles
+                </a>
+            </li>
+            <li>
+                <a href="http://acko.net/" target="_blank">
+                    Practical example - acko.net logo
+                </a>
+            </li>
+            <li>
+                <a href="http://threejs.org/examples/" target="_blank">
+                    THREE.js examples
+                </a>
+            </li>
+            <li>
+                <a href="https://videos-real-origin.cdn.mozilla.net/uploads/mozhacks/flight-of-the-navigator/" target="_blank">
+                    Flight of the navigator
+                </a>
+            </li>   
+        </ol>
+    </section>
+
+    <section class="slide">
+        <h2>OpenGL</h2>
+        <figure>
+            <blockquote>
+                <p>Open Graphics Library is a cross-language, cross-platform application programming interface (API) for rendering 2D and 3D vector graphics. The API is typically used to interact with a graphics processing unit (GPU), to achieve hardware-accelerated rendering.</p>
+            </blockquote>
+            <figcaption>Wikipedia</figcaption>
+        </figure>        
+    </section>
+
+    <section class="slide">
+        <h2>OpenGL</h2>
+        <ul>
+            <li>Created in 1992</li>
+            <li>Widely used</li>
+            <li>Very fast</li>
+            <li>Hard to learn and write programs</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Code example</h3>
+        <pre style="font-size: 13px;" class="language-clike line-numbers">
+            <code>
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(x,y,z);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+    glNormalPointer(GL_FLOAT, 0, &normals[0]);
+    glTexCoordPointer(2, GL_FLOAT, 0, &texcoords[0]);
+    glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, &indices[0]);
+    glPopMatrix();
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>WebGL</h2>
+        <p>Browser version of OpenGL. Allows to use GPU accelerated 3D rendering, currently supported by all modern browsers.</p>
+        <ul>
+            <li>Released in 2011</li>
+            <li>OpenGL + JavaScript marriage!</li>
+            <li>Almost the same speed as native 3D applications.</li>
+            <li>Sadly, still lots of boilerplate</li>
+        </ul>
+
+    </section>
+
+    <section class="slide">
+        <h2>THREE.js to the rescue!</h2>
+        <p>Most popular WebGL wrapper</p>
+        <img src="pictures/threejs-github.png">
+        <p>You don't have to touch native WebGL code!</p>
+        <p>
+            Lots of ready to use helpers, like OrbitCamera, and reference examples. Easy to learn, as each THREE.js example source code is easily available (just look at source of a site).
+        </p>
+    </section>
+
+    <section class="slide">
+        <h2>Scene and camera</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Objects</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+var cube = new THREE.Mesh( geometry, material );
+scene.add( cube );
+
+// we have to move camera backwards to actually see a cube
+camera.position.z = 5;
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Render loop</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+function render() {
+    cube.rotation.x += 0.05;
+    cube.rotation.y += 0.05;
+    requestAnimationFrame( render );
+    renderer.render( scene, camera );
+}
+render();
+            </code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h2>Hello world! (<a href="cube.html" target="_blank">link</a>)</h2>
+        <div style="text-align: center;">
+            <iframe src="cube.html" width="70%" style="height: 40vh;">
+                Your browser does not support inline frames.
+            </iframe>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Let's modify it - fog</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+// add fog
+scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
+
+// and set clear color
+renderer.setClearColor( scene.fog.color );  
+            </code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h2>Let's modify it - controls</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+// add and initialize OrbitControls.js  
+var controls = new THREE.OrbitControls( camera, renderer.domElement );
+controls.enableDamping = true;
+controls.dampingFactor = 0.2; 
+
+// inside render()
+controls.update();
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Let's modify it - objects</h2>
+        <pre style="font-size: 18px;" class="language-js line-numbers">
+            <code>
+var geometry = new THREE.CylinderGeometry( 0, 10, 30, 16, 1 );
+var material =  new THREE.MeshPhongMaterial( { color:0x77ff77 } );
+for ( var i = 0; i < 500; i ++ ) {
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.x = ( Math.random() - 0.5 ) * 1000;
+    mesh.position.y = ( Math.random() - 0.5 ) * 1000;
+    mesh.position.z = ( Math.random() - 0.5 ) * 1000;
+    scene.add( mesh );
+}
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Let's modify it - lights</h2>
+        <pre style="font-size: 18px;" class="language-js line-numbers">
+            <code>
+var light = new THREE.DirectionalLight( 0xffffff );
+light.position.set( 1, 1, 1 );
+scene.add( light );
+
+light = new THREE.DirectionalLight( 0x002288 );
+light.position.set( -1, -1, -1 );
+scene.add( light );
+
+light = new THREE.AmbientLight( 0x222222 );
+scene.add( light );
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>It's ready (<a href="lights.html" target="_blank">link</a>)</h2>
+        <div style="text-align: center;">
+            <iframe src="lights.html" width="70%" style="height: 40vh;">
+                Your browser does not support inline frames.
+            </iframe>
+        </div>
+    </section>
 
     <section class="slide">
         <h3 class="shout">See you next month at WarsawJS</h3>
@@ -55,7 +298,7 @@
     <div class="progress"></div>
 
     <footer class="badge">
-        <a href="https://github.com/warsawjs/warsawjs-slides-template">Fork me on GitHub</a>
+        <a href="https://github.com/Valian/warsawjs-slides-threejs">Fork me on GitHub</a>
     </footer>
 
     <footer class="badge badge-down">

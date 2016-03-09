@@ -1,0 +1,11 @@
+.slide {
+    padding-top: 50px;
+}
+
+.slide h2 {
+    margin-bottom: 20px;
+}
+
+pre {
+	overflow-x: hidden !important;
+}

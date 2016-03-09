@@ -14,6 +14,8 @@
     <!-- Prism.js -->
     <link rel="stylesheet" href="vendors/prism/prism.css"/>
     <link rel="stylesheet" href="vendors/prism/custom-prism.css"/>
+
+    <link rel="stylesheet" href="styles/custom.css"/>
 </head>
 <body class="shower list">
     <header class="caption">
@@ -27,13 +29,13 @@
         </div>
         <div class="details">
             <!-- 1. Avatar -->
-            <img src="pictures/avatar.jpg" alt="Speaker"/>
+            <img src="pictures/avatar.jpg" height="200" alt="Speaker"/>
 
             <!-- 2. Speaker -->
             <h2>Jakub Skałecki</h2>
 
             <!-- 3. Presentation title -->
-            <h2><strong>"Painless 3D graphics in browser with THREE.js"</strong></h2>
+            <h2><strong>"Painless 3D graphics with THREE.js"</strong></h2>
 
             <!-- 4. Presentation date -->
             <h2>2016-03-09</h2>
@@ -49,8 +51,10 @@
             <li>Examples!</li>
             <li>Short introduction to OpenGL and WebGL</li>
             <li>What is THREE.js</li>
-            <li>Hello world!</li>
-            <li>More advanced sample</li>
+            <li>Hello world</li>
+            <li>Modify it!</li>
+            <li>Shapes</li>
+            <li>Extras</li>
         </ol>
     </section>
 
@@ -74,8 +78,8 @@
                 </a>
             </li>
             <li>
-                <a href="http://alteredqualia.com/three/examples/webgl_terrain_dynamic.html" target="_blank">
-                    Dynamic terrain
+                <a href="http://threejs.org/examples/webgl_materials_shaders_fresnel" target="_blank">
+                    Bubbles
                 </a>
             </li>
             <li>
@@ -102,13 +106,15 @@
     </section>
 
     <section class="slide">
-        <h2>OpenGL</h2>
-        <figure>
-            <blockquote>
-                <p>Open Graphics Library is a cross-language, cross-platform application programming interface (API) for rendering 2D and 3D vector graphics. The API is typically used to interact with a graphics processing unit (GPU), to achieve hardware-accelerated rendering.</p>
-            </blockquote>
-            <figcaption>Wikipedia</figcaption>
-        </figure>        
+        <div>
+            <h2>OpenGL</h2>
+            <figure>
+                <blockquote>
+                    <p>Open Graphics Library is a cross-language, cross-platform application programming interface (API) for rendering 2D and 3D vector graphics. The API is typically used to interact with a graphics processing unit (GPU), to achieve hardware-accelerated rendering.</p>
+                </blockquote>
+                <figcaption>Wikipedia</figcaption>
+            </figure>  
+        </div>      
     </section>
 
     <section class="slide">
@@ -117,30 +123,10 @@
             <li>Created in 1992</li>
             <li>Widely used</li>
             <li>Very fast</li>
-            <li>Hard to learn and write programs</li>
+            <li>Low level, requires lots of code</li>
         </ul>
     </section>
 
-    <section class="slide">
-        <h2>Code example</h3>
-        <pre style="font-size: 13px;" class="language-clike line-numbers">
-            <code>
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glTranslatef(x,y,z);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-    glNormalPointer(GL_FLOAT, 0, &normals[0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, &texcoords[0]);
-    glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, &indices[0]);
-    glPopMatrix();
-            </code>
-        </pre>
-    </section>
 
     <section class="slide">
         <h2>WebGL</h2>
@@ -151,8 +137,8 @@
             <li>Almost the same speed as native 3D applications.</li>
             <li>Sadly, still lots of boilerplate</li>
         </ul>
-
     </section>
+
 
     <section class="slide">
         <h2>THREE.js to the rescue!</h2>
@@ -166,12 +152,14 @@
 
     <section class="slide">
         <h2>Scene and camera</h2>
-        <pre style="font-size: 20px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+var camera = new THREE.PerspectiveCamera(
+60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer();           
+renderer.setClearColor( 0xffffff );     
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
             </code>
@@ -180,14 +168,17 @@ document.body.appendChild( renderer.domElement );
 
     <section class="slide">
         <h2>Objects</h2>
-        <pre style="font-size: 20px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+var geometry = new THREE.BoxGeometry( 2.5, 2.5, 2.5 );
+var material = new THREE.MeshBasicMaterial({ 
+    color: 0xff0000, 
+    wireframe: true 
+});
 var cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 
-// we have to move camera backwards to actually see a cube
+// we have to move camera to actually see a cube
 camera.position.z = 5;
             </code>
         </pre>
@@ -195,11 +186,11 @@ camera.position.z = 5;
 
     <section class="slide">
         <h2>Render loop</h2>
-        <pre style="font-size: 20px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 function render() {
-    cube.rotation.x += 0.05;
-    cube.rotation.y += 0.05;
+    cube.rotation.x += 0.03;
+    cube.rotation.y += 0.03;
     requestAnimationFrame( render );
     renderer.render( scene, camera );
 }
@@ -210,7 +201,7 @@ render();
 
 
     <section class="slide">
-        <h2>Hello world! (<a href="cube.html" target="_blank">link</a>)</h2>
+        <h2>Hello world! (<a href="cube.html" target="_blank">link</a>) - 17 SLOC</h2>
         <div style="text-align: center;">
             <iframe src="cube.html" width="70%" style="height: 40vh;">
                 Your browser does not support inline frames.
@@ -220,7 +211,7 @@ render();
 
     <section class="slide">
         <h2>Let's modify it - fog</h2>
-        <pre style="font-size: 20px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 // add fog
 scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
@@ -234,10 +225,11 @@ renderer.setClearColor( scene.fog.color );
 
     <section class="slide">
         <h2>Let's modify it - controls</h2>
-        <pre style="font-size: 20px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 // add and initialize OrbitControls.js  
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
+var controls = new THREE.OrbitControls( 
+    camera, renderer.domElement );
 controls.enableDamping = true;
 controls.dampingFactor = 0.2; 
 
@@ -249,7 +241,7 @@ controls.update();
 
     <section class="slide">
         <h2>Let's modify it - objects</h2>
-        <pre style="font-size: 18px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 var geometry = new THREE.CylinderGeometry( 0, 10, 30, 16, 1 );
 var material =  new THREE.MeshPhongMaterial( { color:0x77ff77 } );
@@ -266,7 +258,7 @@ for ( var i = 0; i < 500; i ++ ) {
 
     <section class="slide">
         <h2>Let's modify it - lights</h2>
-        <pre style="font-size: 18px;" class="language-js line-numbers">
+        <pre style="font-size: 22px;" class="language-js line-numbers">
             <code>
 var light = new THREE.DirectionalLight( 0xffffff );
 light.position.set( 1, 1, 1 );
@@ -283,7 +275,7 @@ scene.add( light );
     </section>
 
     <section class="slide">
-        <h2>It's ready (<a href="lights.html" target="_blank">link</a>)</h2>
+        <h2>It's ready (<a href="lights.html" target="_blank">link</a>) - 30 SLOC</h2>
         <div style="text-align: center;">
             <iframe src="lights.html" width="70%" style="height: 40vh;">
                 Your browser does not support inline frames.
@@ -292,7 +284,115 @@ scene.add( light );
     </section>
 
     <section class="slide">
-        <h3 class="shout">See you next month at WarsawJS</h3>
+        <h2>Last change - shape</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+var x = 0, y = 0, heartShape = new THREE.Shape(); 
+
+heartShape.moveTo( x + 25, y + 25 );
+heartShape.bezierCurveTo( x + 25, y + 25, x + 20, y, x, y );
+heartShape.bezierCurveTo( x - 30, y, x - 30, y + 35,x - 30,y + 35 );
+heartShape.bezierCurveTo( x - 30, y + 55, x - 10, y + 77, x + 25, y + 95 );
+heartShape.bezierCurveTo( x + 60, y + 77, x + 80, y + 55, x + 80, y + 35 );
+heartShape.bezierCurveTo( x + 80, y + 35, x + 80, y, x + 50, y );
+heartShape.bezierCurveTo( x + 35, y, x + 25, y + 25, x + 25, y + 25 );
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Last change - shape</h2>
+        <pre style="font-size: 22px;" class="language-js line-numbers">
+            <code>
+var extrudeSettings = { 
+    amount: 8, bevelEnabled: true, bevelSegments: 2, 
+    steps: 2, bevelSize: 1, bevelThickness: 1 
+};
+var geometry = new THREE.ExtrudeGeometry( 
+    heartShape, extrudeSettings );
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Result (<a href="hearts.html" target="_blank">link</a>) - 44 SLOC</h2>
+        <div style="text-align: center;">
+            <iframe src="hearts.html" width="70%" style="height: 40vh;">
+                Your browser does not support inline frames.
+            </iframe>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Extra - custom shader (<a href="http://threejs.org/examples/webgl_shader_lava">example</a>)</h2>
+        <pre style="font-size: 20px;" class="language-js line-numbers">
+            <code>
+var material = new THREE.ShaderMaterial( {
+    uniforms: {
+        time: { type: "f", value: 1.0 },
+        resolution: { type: "v2", value: new THREE.Vector2() }
+    },
+    attributes: {
+        vertexOpacity: { type: 'f', value: [] }
+    },
+    vertexShader: document.getElementById( 'vs' ).textContent,
+    fragmentShader: document.getElementById( 'fs' ).textContent
+} );
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>Extra - loading textures</h2>
+        <pre style="font-size: 22px;" class="language-js line-numbers">
+            <code>
+var texture = new THREE.Texture();
+var loader = new THREE.ImageLoader();
+loader.load( 'path/to/texture.jpg', function ( image ) {
+    texture.image = image;
+    texture.needsUpdate = true;
+} );
+// usage
+material.map = texture;
+            </code>
+        </pre>
+    </section>
+    <section class="slide">
+        <h2>Extra - loading OBJ files (<a href="http://threejs.org/examples/webgl_loader_obj.html">example</a>)</h2>
+        <pre style="font-size: 22px;" class="language-js line-numbers">
+            <code>
+var loader = new THREE.OBJLoader();    
+loader.load( 'path/to/obj', function ( object ) {
+    scene.add( object );
+}, onProgress, onError );
+            </code>
+        </pre>
+    </section>
+
+
+    <section class="slide">
+        <h2>Links</h2>
+        <ol>            
+            <li>
+                <a href="http://threejs.org" target="_blank">
+                    THREE.js
+                </a>
+            </li>
+            <li>
+                <a href="http://threejs.org/examples/misc_controls_orbit" target="_blank">
+                    Orbit Controls
+                </a>
+            </li>
+            <li>
+                <a href="https://pl.wikipedia.org/wiki/OpenGL" target="_blank">
+                    OpenGL - wikipedia
+                </a>
+            </li>            
+        </ol>
+    </section>
+
+    <section class="slide">
+        <h3 class="shout">Questions?</h3>
     </section>
 
     <div class="progress"></div>
